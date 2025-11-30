@@ -1,0 +1,7 @@
+<ng-content-carousel>
+  @for (image of images(); track $index) {
+  <div contentCarouselItem>
+    <img [src]="image | productImage" class="w-full object-cover" />
+  </div>
+  }
+</ng-content-carousel>

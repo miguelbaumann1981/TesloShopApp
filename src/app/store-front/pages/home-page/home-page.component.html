@@ -2,8 +2,10 @@
 <h2 class="text-2xl mb-5 text-primary">All products</h2>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2 gap-3">
-  <product-card />
-  <product-card />
-  <product-card />
+  @for (product of productsResource.value()?.products; track $index) {
+    <product-card [product]="product" />
+  } @empty {
+    <p>No products available</p>
+  }
 </div>
 
