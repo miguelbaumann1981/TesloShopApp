@@ -1,6 +1,6 @@
 <front-navbar />
 
 
-<section class="container mx-auto my-5">
+<section class="container mx-auto my-5" [class.opacity-20]="authService.authStatus() === 'not-authenticated'">
   <router-outlet />
 </section>

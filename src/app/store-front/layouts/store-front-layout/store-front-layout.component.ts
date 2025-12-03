@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FrontNavbarComponent } from '../../components/front-navbar/front-navbar.component';
+import { AuthService } from '@/auth/services/auth.service';
 
 @Component({
   selector: 'app-store-front-layout',
@@ -10,4 +11,10 @@ import { FrontNavbarComponent } from '../../components/front-navbar/front-navbar
   ],
   templateUrl: './store-front-layout.component.html',
 })
-export class StoreFrontLayoutComponent { }
+export class StoreFrontLayoutComponent { 
+
+  authService = inject(AuthService);
+  
+
+
+}
