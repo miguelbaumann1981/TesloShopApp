@@ -8,7 +8,10 @@ const BASE_API_URL = environment.baseUrl;
 })
 
 export class ProductImagePipe implements PipeTransform {
-    transform(value: string | string[]): string {
+    transform(value: string | string[] | null): string {
+        if (value === null) {
+            return './assets/images/no-image.jpg';
+        }
         if (typeof value === 'string') {
            return `${BASE_API_URL}/files/product/${value}`;
         }

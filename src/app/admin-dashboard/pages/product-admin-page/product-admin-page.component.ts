@@ -1,8 +1,40 @@
-import { Component } from '@angular/core';
+import { ProductDetailsComponent } from '@/admin-dashboard/components/product-details/product-details.component';
+import { ProductsService } from '@/products/services/products.service';
+import { Component, effect, inject, signal } from '@angular/core';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-product-admin-page',
-  imports: [],
+  imports: [
+    ProductDetailsComponent
+  ],
   templateUrl: './product-admin-page.component.html',
 })
-export class ProductAdminPageComponent { }
+export class ProductAdminPageComponent { 
+
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
+  productService = inject(ProductsService)
+
+  productId = toSignal(
+    this.activatedRoute.params.pipe(
+      map( params => params['id'] )
+    )
+  );
+
+  productResource = rxResource({
+    params: () => ({ id: this.productId()  }),
+    stream: ({params}) => {
+      return this.productService.getProductById(params.id);
+    }
+  });
+
+  redirectEffect = effect(() => {
+    if (this.productResource.error()) {
+      this.router.navigateByUrl('/admin/products');
+    }
+  })
+
+}

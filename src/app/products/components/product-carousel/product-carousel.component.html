@@ -3,5 +3,9 @@
   <div contentCarouselItem>
     <img [src]="image | productImage" class="w-full object-cover" />
   </div>
+  } @empty {
+    <div contentCarouselItem>
+    <img [src]="null | productImage" class="w-full object-cover" />
+  </div>
   }
 </ng-content-carousel>

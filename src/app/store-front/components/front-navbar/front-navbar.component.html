@@ -35,7 +35,12 @@
         </li>
     </ul>
   </div>
-  <div class="navbar-end gap-4">
+  <div class="navbar-end gap-10">
+
+    @if (authService.isAdmin()) {
+      <a routerLink="/admin">Admin Panel</a>
+    }
+
     @if (authService.authStatus() === 'authenticated') {
       <span class="text-accent">{{ authService.user()?.fullName }}</span>
       
