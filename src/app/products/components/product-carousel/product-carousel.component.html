@@ -1,11 +1,15 @@
-<ng-content-carousel>
-  @for (image of images(); track $index) {
-  <div contentCarouselItem>
-    <img [src]="image | productImage" class="w-full object-cover" />
-  </div>
-  } @empty {
-    <div contentCarouselItem>
-    <img [src]="null | productImage" class="w-full object-cover" />
-  </div>
-  }
-</ng-content-carousel>
+<p-carousel [value]="slides" [numVisible]="1" [numScroll]="1" [circular]="false">
+    <ng-template let-slide #item>
+        <div class="rounded-border m-2">
+            <div class="mb-4">
+                <div class="relative mx-auto">
+                    <img [src]="slide.url" class="w-full rounded-border" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-carousel>
+  <!-- <rm-carousel 
+    [slides]="slides" 
+  /> -->
+

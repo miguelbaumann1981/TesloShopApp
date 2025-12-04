@@ -6,6 +6,9 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { loggingInterceptor } from './shared/interceptors/logging.interceptor';
 import { authInterceptor } from './auth/interceptors/auth.interceptor';
 
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -16,6 +19,13 @@ export const appConfig: ApplicationConfig = {
        withInterceptors([
         loggingInterceptor, 
         authInterceptor])
-    )
+    ),
+    providePrimeNG({
+        theme: {
+            preset: Aura
+        }
+    })
   ]
 };
+
+
