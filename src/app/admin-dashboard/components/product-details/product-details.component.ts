@@ -1,5 +1,5 @@
 import { Product } from '@/products/interfaces/product.interface';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { ProductCarouselComponent } from '@/products/components/product-carousel/product-carousel.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form-utils';
@@ -20,6 +20,11 @@ export class ProductDetailsComponent implements OnInit {
   productsService = inject(ProductsService);
   router = inject(Router);
   wasSaved = signal(false);
+  imageFileList: FileList | undefined = undefined;
+  tempImages = signal<string[]>([]);
+  imagesToCarousel = computed(() => {
+    return [...this.product().images, ...this.tempImages()];
+  });
 
   productForm = this.fb.group({
     title: ['', [Validators.required], []],
@@ -75,18 +80,31 @@ export class ProductDetailsComponent implements OnInit {
     };
 
     if ( this.product().id === 'new' ) {
-      const product = await firstValueFrom( this.productsService.createProduct( productLike ) );
+      const product = await firstValueFrom( this.productsService.createProduct( productLike, this.imageFileList ) );
       this.router.navigate(['/admin/products', product.id]);
     } else {
-      await firstValueFrom( this.productsService.updateProduct(this.product().id, productLike) );
+      await firstValueFrom( this.productsService.updateProduct(this.product().id, productLike, this.imageFileList) );
+
+      if (this.imageFileList !== undefined) {
+        window.location.reload();
+      }
     }
+
     this.wasSaved.set(true);
     setTimeout(() => {
       this.wasSaved.set(false);
     }, 3000);
 
-
-
-
   }
+
+  onFilesChange(event: Event) {
+    const fileList = (event.target as HTMLInputElement).files;
+    this.imageFileList = fileList ?? undefined;
+
+    const imageUrls = Array.from(fileList ?? []).map(file => URL.createObjectURL(file));
+   
+    this.tempImages.set(imageUrls);
+  }
+
+
 }

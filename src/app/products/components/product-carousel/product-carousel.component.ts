@@ -1,7 +1,8 @@
-import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, input, OnChanges, SimpleChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
+import { ProductsService } from '@/products/services/products.service';
 
 const BASE_API_URL = environment.baseUrl;
 
@@ -12,34 +13,33 @@ interface ImageSlide {
 
 @Component({
   selector: 'product-carousel',
-  imports: [
-    CarouselModule ,
-    ButtonModule,
-  ],
+  imports: [CarouselModule, ButtonModule],
   templateUrl: './product-carousel.component.html',
 })
-export class ProductCarouselComponent implements OnChanges { 
-
+export class ProductCarouselComponent implements OnChanges {
   images = input.required<string[]>();
   slides: ImageSlide[] = [];
+  productsService = inject(ProductsService);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['images']) {
-      if (changes['images'].currentValue.length > 0) {
-      this.slides = changes['images'].currentValue.map((img: any) => {
-        return {
-          url: `${BASE_API_URL}/files/product/${img}`,
-          title: img,
-        }
-      })
-    } else {
-      this.slides = [
-        {
-          url: './assets/images/no-image.jpg',
-          title: 'No image',
-        }
-      ];
-    }
+      const allImages = changes['images'].currentValue;
+      
+      if (allImages.length > 0) {
+        this.slides = allImages.map((img: any) => {
+          return {
+            url: `${BASE_API_URL}/files/product/${img}`,
+            title: img,
+          };
+        });
+      } else {
+        this.slides = [
+          {
+            url: './assets/images/no-image.jpg',
+            title: 'No image',
+          },
+        ];
+      }
     }
   }
 
